@@ -2,16 +2,20 @@ package controllers
 
 import java.time.LocalDate
 
+import anorm._
+import anorm.{ Macro, RowParser }
+
 import javax.inject._
 import play.api._
 import play.api.mvc._
+import play.api.db._
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class HomeController @Inject()(db: Database, cc: ControllerComponents) extends AbstractController(cc) {
 
   /**
    * Create an Action to render an HTML page.
@@ -34,7 +38,15 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
   def hello(name: String, age: Int) = Action { implicit request: Request[AnyContent] =>
     val date = LocalDate.now().toString
-    Ok(views.html.hello(name, age, date))
+
+    db.withConnection { implicit c =>
+      val parser: RowParser[User] = Macro.namedParser[User]
+      val users: List[User] = SQL("select id, username from auth_user").as(parser.*)
+      println(users)
+      Ok(views.html.hello(name, age, date, users))
+    }
   }
   
 }
+
+case class User(id: Int, username: String)
