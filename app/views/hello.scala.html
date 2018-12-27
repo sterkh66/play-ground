@@ -1,0 +1,20 @@
+@(name: String, age: Int, date: String)
+@main("Hello") {
+<section id="content">
+    <div class="wrapper doc">
+        <article>
+            <h1>Hello, @name!</h1>
+            <h2>Today is @date</h2>
+            <h2>You're, @age years old</h2>
+            <ul>
+            @for(i <- 1 to 5){
+            <li>@i</li>
+            }
+            </ul>
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </div>
+</section>
+}
