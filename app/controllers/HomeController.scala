@@ -6,9 +6,10 @@ import anorm._
 import anorm.{ Macro, RowParser }
 
 import javax.inject._
-import play.api._
 import play.api.mvc._
 import play.api.db._
+
+import models.User
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the
@@ -46,7 +47,5 @@ class HomeController @Inject()(db: Database, cc: ControllerComponents) extends A
       Ok(views.html.hello(name, age, date, users))
     }
   }
-  
 }
 
-case class User(id: Int, username: String)
